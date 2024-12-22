@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       translations: Langs(),
-      fallbackLocale: const Locale('ar', 'AE'),
+      fallbackLocale: const Locale('en', 'US'),
 
       // when using EasyLocalization
       // localizationsDelegates: context.localizationDelegates,

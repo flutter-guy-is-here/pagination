@@ -7,6 +7,7 @@ import 'package:pagination/localization/localization_chacker.dart';
 import 'package:pagination/models/module.dart';
 import 'package:pagination/utils/helpers/network_manager.dart';
 import 'package:pagination/widgets/module_tile.dart';
+import 'package:pagination/widgets/adaptive_pull_to_refresh.dart';
 import 'package:pagination/widgets/shimmer_list.dart';
 
 class ExplorePage extends StatefulWidget {
@@ -47,61 +48,84 @@ class _ExplorePageState extends State<ExplorePage> {
           ],
         ),
         body: SafeArea(
-          child: RefreshIndicator(
-            onRefresh: exploreController.loadData,
-            child: Obx(
-              () => exploreController.loading.value
-                  ? /* const Center(
-                  child: Text(
-                  "loading...!",
-                  style: TextStyle(color: Colors.black87, fontSize: 24),
-                ))*/
-                  const ShimmerList()
-                  : exploreController.modules.isEmpty
-                      ? FutureBuilder(
-                          future: NetworkManager.isConnected(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              return Center(
-                                child: Text(snapshot.data ?? false
-                                    ? "No elements found"
-                                    : "YOU ARE NOT CONNECTED"),
-                              );
-                            }
-
-                            return SizedBox.shrink();
-                          },
-                        )
-                      : ListView.separated(
-                          controller: exploreController.controller,
-                          itemCount: exploreController.modules.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index == exploreController.modules.length) {
-                              return ListTile(
-                                title: Text(exploreController.hasMore.value
-                                    ? "LOEADING MORE...."
-                                    : "You reached the end of the list"),
-                              );
-                            } else {
-                              Module module = exploreController.modules[index];
-                              return ModuleTile(module: module);
-                            }
-                          },
-                          separatorBuilder: (BuildContext context, int index) {
-                            return const SizedBox(
-                              height: 15,
+          child: Obx(
+            () => exploreController.loading.value
+                ? /* const Center(
+                child: Text(
+                "loading...!",
+                style: TextStyle(color: Colors.black87, fontSize: 24),
+              ))*/
+                const ShimmerList()
+                : exploreController.modules.isEmpty
+                    ? FutureBuilder(
+                        future: NetworkManager.isConnected(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            return Center(
+                              child: Text(snapshot.data ?? false
+                                  ? "no_element".tr
+                                  : "YOU ARE NOT CONNECTED"),
                             );
-                          },
-                        ),
-            ),
+                          }
+
+                          return const SizedBox.shrink();
+                        },
+                      )
+                    :
+                    // adaptive scroll view with refresh indicator
+                    AdaptivePullToRefresh(
+                        itemCount: exploreController.modules.length + 1,
+                        scrollController: exploreController.controller,
+                        onRefresh: exploreController.loadData,
+                        // physics: const AlwaysScrollableScrollPhysics(),
+                        builder: (context, index) {
+                          if (index == exploreController.modules.length) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 7),
+                              child: ListTile(
+                                title: Text(exploreController.hasMore.value
+                                    ? "loading_more".tr
+                                    : "end_of_list".tr),
+                              ),
+                            );
+                          } else {
+                            Module module = exploreController.modules[index];
+                            return ModuleTile(module: module);
+                          }
+                        },
+                      ),
+
+            // ONLY FOR ANDROID
+            // ListView.separated(
+            //     controller: exploreController.controller,
+            //     itemCount: exploreController.modules.length + 1,
+            //     itemBuilder: (context, index) {
+            //       if (index == exploreController.modules.length) {
+            //         return ListTile(
+            //           title: Text(exploreController.hasMore.value
+            //               ? "loading_more".tr
+            //               : "end_of_list".tr),
+            //         );
+            //       } else {
+            //         Module module = exploreController.modules[index];
+            //         return ModuleTile(module: module);
+            //       }
+            //     },
+            //     separatorBuilder: (BuildContext context, int index) {
+            //       return const SizedBox(
+            //         height: 15,
+            //       );
+            //     },
+            //   ),
           ),
         ));
   }
 }
 
-class firestoreListview extends StatelessWidget {
-  const firestoreListview({
+class FirestoreListview extends StatelessWidget {
+  const FirestoreListview({
     super.key,
     required this.collection,
   });
