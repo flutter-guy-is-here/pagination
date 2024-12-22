@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pagination/models/module.dart';
 import 'package:pagination/utils/formatters/firestore_time.dart';
 
@@ -6,7 +7,6 @@ class ModuleTile extends StatelessWidget {
   const ModuleTile({super.key, required this.module});
 
   final Module module;
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -37,13 +37,13 @@ class ModuleTile extends StatelessWidget {
       subtitle: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text.rich(TextSpan(text: "Year: ", children: [
+          Text.rich(TextSpan(text: "${"year".tr} : ", children: [
             TextSpan(
                 text: module.year ?? "",
                 style: const TextStyle(
                     fontWeight: FontWeight.w600, color: Colors.black87))
           ])),
-          Text.rich(TextSpan(text: "Hours: ", children: [
+          Text.rich(TextSpan(text: "${"hours".tr} : ", children: [
             TextSpan(
                 text: module.hours.toString(),
                 style: const TextStyle(
