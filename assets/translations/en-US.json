@@ -1,5 +1,6 @@
 {
     "year": "Year",
     "hours": "Hours",
-    "change_the_languge": "Change the languge"
+    "change_the_languge": "Change the languge",
+    "module_name": "Module name"
 }

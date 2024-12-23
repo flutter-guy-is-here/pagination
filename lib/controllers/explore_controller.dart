@@ -38,8 +38,9 @@ class ExploreController extends GetxController {
       modules.clear();
       hasMore.value = true;
       modules.addAll(fetchedModules.toList());
-      if (isFromCache.value)
+      if (isFromCache.value) {
         Get.snackbar("THE DATA LOADED FROM CACHE", "NO INTERNET ACCESS");
+      }
     } on FirebaseException catch (e) {
       Get.snackbar("Something went wrong", e.code.toString(),
           icon: const Icon(

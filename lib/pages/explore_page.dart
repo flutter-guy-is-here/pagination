@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:pagination/controllers/explore_controller.dart';
 import 'package:pagination/localization/localization_chacker.dart';
 import 'package:pagination/models/module.dart';
+import 'package:pagination/pages/details_page.dart';
 import 'package:pagination/utils/helpers/network_manager.dart';
 import 'package:pagination/widgets/module_tile.dart';
 import 'package:pagination/widgets/adaptive_pull_to_refresh.dart';
@@ -24,7 +25,6 @@ class _ExplorePageState extends State<ExplorePage> {
   @override
   void initState() {
     // exploreController.get
-
     super.initState();
     final collectionRef = FirebaseFirestore.instance.collection('modules');
 
@@ -85,14 +85,29 @@ class _ExplorePageState extends State<ExplorePage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 7),
                               child: ListTile(
-                                title: Text(exploreController.hasMore.value
-                                    ? "loading_more".tr
-                                    : "end_of_list".tr),
-                              ),
+                                  title: Text(exploreController.hasMore.value
+                                      ? "loading_more".tr
+                                      : "end_of_list".tr)),
                             );
                           } else {
                             Module module = exploreController.modules[index];
-                            return ModuleTile(module: module);
+                            return GestureDetector(
+                                onTap: () {
+                                  Get.to(() => DetailsPage(
+                                        module: module,
+                                      ));
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //       builder: (context) =>
+                                  //           (DetailsPage(module: module)),
+                                  //     ));
+                                },
+                                child: Material(
+                                  child: Hero(
+                                      tag: "mod-coef-${module.name}",
+                                      child: ModuleTile(module: module)),
+                                ));
                           }
                         },
                       ),
