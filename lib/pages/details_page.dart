@@ -32,7 +32,7 @@ class DetailsPage extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Padding(

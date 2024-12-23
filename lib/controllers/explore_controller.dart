@@ -98,11 +98,11 @@ class ExploreController extends GetxController {
 
   // when scrolled all the way down to load more data
   void onScroll() async {
-    print("LOAD MORE CALLED beforee");
+    // print("LOAD MORE CALLED beforee");
     if (controller.position.pixels == controller.position.maxScrollExtent &&
         !loadingMore.value &&
         hasMore.value) {
-      print("LOAD MORE CALLED");
+      // print("LOAD MORE CALLED");
       await loadMore();
     }
   }
